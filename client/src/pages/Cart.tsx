@@ -11,7 +11,6 @@ export default function Cart() {
   const [_, setLocation] = useLocation();
 
   const handleCheckout = () => {
-    // Transform cart items to format expected by backend (price in cents is already handled by types)
     const orderData = {
       items: items.map(item => ({
         productId: item.id,
@@ -29,8 +28,9 @@ export default function Cart() {
     });
   };
 
-  const deliveryFee = 500; // $5.00
-  const taxes = Math.round(cartTotal * 0.08); // 8% tax
+  // 🇮🇳 Indian pricing (stored in paise)
+  const deliveryFee = 4000; // ₹40 delivery
+  const taxes = Math.round(cartTotal * 0.05); // 5% GST
   const grandTotal = cartTotal + deliveryFee + taxes;
 
   if (items.length === 0) {
@@ -62,7 +62,7 @@ export default function Cart() {
       </div>
 
       <div className="grid gap-8 lg:grid-cols-3">
-        {/* Cart Items List */}
+        {/* Cart Items */}
         <div className="lg:col-span-2">
           <div className="rounded-2xl border bg-card shadow-sm">
             <AnimatePresence initial={false}>
@@ -81,15 +81,19 @@ export default function Cart() {
                       className="h-full w-full object-cover"
                     />
                   </div>
-                  
+
                   <div className="flex flex-1 flex-col justify-between">
                     <div className="flex justify-between gap-2">
                       <div>
-                        <h3 className="font-semibold text-foreground line-clamp-1">{item.name}</h3>
-                        <p className="text-sm text-muted-foreground capitalize">{item.category}</p>
+                        <h3 className="font-semibold text-foreground line-clamp-1">
+                          {item.name}
+                        </h3>
+                        <p className="text-sm text-muted-foreground capitalize">
+                          {item.category}
+                        </p>
                       </div>
                       <p className="font-semibold text-foreground">
-                        ${((item.price * item.quantity) / 100).toFixed(2)}
+                        ₹{((item.price * item.quantity) / 100).toFixed(2)}
                       </p>
                     </div>
 
@@ -101,7 +105,9 @@ export default function Cart() {
                         >
                           <Minus className="h-4 w-4" />
                         </button>
-                        <span className="w-4 text-center text-sm font-semibold">{item.quantity}</span>
+                        <span className="w-4 text-center text-sm font-semibold">
+                          {item.quantity}
+                        </span>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           className="rounded-md p-1 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
@@ -109,7 +115,7 @@ export default function Cart() {
                           <Plus className="h-4 w-4" />
                         </button>
                       </div>
-                      
+
                       <Button
                         variant="ghost"
                         size="icon"
@@ -130,26 +136,26 @@ export default function Cart() {
         <div className="lg:col-span-1">
           <div className="sticky top-24 rounded-2xl border bg-card p-6 shadow-sm">
             <h2 className="mb-4 font-display text-xl font-bold">Order Summary</h2>
-            
+
             <div className="space-y-3 border-b pb-4">
               <div className="flex justify-between text-muted-foreground">
                 <span>Subtotal</span>
-                <span>${(cartTotal / 100).toFixed(2)}</span>
+                <span>₹{(cartTotal / 100).toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-muted-foreground">
                 <span>Delivery Fee</span>
-                <span>${(deliveryFee / 100).toFixed(2)}</span>
+                <span>₹{(deliveryFee / 100).toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-muted-foreground">
-                <span>Taxes (8%)</span>
-                <span>${(taxes / 100).toFixed(2)}</span>
+                <span>GST (5%)</span>
+                <span>₹{(taxes / 100).toFixed(2)}</span>
               </div>
             </div>
-            
+
             <div className="mt-4 flex justify-between pb-6">
               <span className="text-lg font-bold">Total</span>
               <span className="text-lg font-bold text-primary">
-                ${(grandTotal / 100).toFixed(2)}
+                ₹{(grandTotal / 100).toFixed(2)}
               </span>
             </div>
 
@@ -160,9 +166,9 @@ export default function Cart() {
             >
               {isPending ? "Placing Order..." : "Checkout Now"}
             </Button>
-            
+
             <p className="mt-4 text-center text-xs text-muted-foreground">
-              Secure checkout provided by SuperApp.
+              Secure checkout powered by Swiftly 🇮🇳
             </p>
           </div>
         </div>
