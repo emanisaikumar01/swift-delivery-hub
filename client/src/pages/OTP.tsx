@@ -6,11 +6,26 @@ export default function OTP() {
   const [otp, setOtp] = useState("");
 
   const handleVerify = () => {
-    if (otp.length === 6) {
-      // ✅ later connect Firebase here
-      setLocation("/");
-    } else {
+    if (otp.length !== 6) {
       alert("Enter valid OTP");
+      return;
+    }
+
+    try {
+      // ✅ SAVE AUTH FIRST (must match App.tsx guard)
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          phone: "demo-user", // TODO: replace with real phone later
+          loggedIn: true,
+        })
+      );
+
+      // ✅ THEN NAVIGATE TO HOME
+      setLocation("/");
+    } catch (err) {
+      console.error("OTP verify error:", err);
+      alert("Something went wrong. Please try again.");
     }
   };
 
@@ -26,12 +41,13 @@ export default function OTP() {
           placeholder="Enter 6-digit OTP"
           className="w-full p-3 rounded-lg text-black mb-4"
           value={otp}
-          onChange={(e) => setOtp(e.target.value)}
+          maxLength={6}
+          onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
         />
 
         <button
           onClick={handleVerify}
-          className="w-full bg-green-600 p-3 rounded-lg font-semibold hover:bg-green-700"
+          className="w-full bg-green-600 p-3 rounded-lg font-semibold hover:bg-green-700 transition"
         >
           Verify OTP
         </button>
