@@ -1,4 +1,5 @@
 import Login from "./pages/Login";
+import OTP from "@/pages/OTP";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
