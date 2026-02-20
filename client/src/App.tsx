@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Login from "./pages/Login";
 import OTP from "@/pages/OTP";
 import { Switch, Route, Redirect } from "wouter";
@@ -15,17 +16,24 @@ import Cart from "@/pages/Cart";
 import Orders from "@/pages/Orders";
 import NotFound from "@/pages/not-found";
 
-/**
- * 🔐 Simple auth check
- * (later you can replace with real JWT/session check)
- */
-const isAuthenticated = () => {
-  if (typeof window === "undefined") return false;
-  return !!localStorage.getItem("user"); // or "token"
-};
-
 function Router() {
-  const loggedIn = isAuthenticated();
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  // ✅ Reactive auth check (CRITICAL FIX)
+  useEffect(() => {
+    const checkAuth = () => {
+      setLoggedIn(!!localStorage.getItem("user"));
+    };
+
+    checkAuth(); // run once
+
+    // listen for storage changes
+    window.addEventListener("storage", checkAuth);
+
+    return () => {
+      window.removeEventListener("storage", checkAuth);
+    };
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col">
