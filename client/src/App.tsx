@@ -20,10 +20,16 @@ function Router() {
       <Navbar />
       <main className="flex-1">
         <Switch>
+          {/* ✅ LOGIN ROUTE ADDED */}
+          <Route path="/login" component={Login} />
+
+          {/* existing routes */}
           <Route path="/" component={Home} />
           <Route path="/service/:serviceType" component={ServicePage} />
           <Route path="/cart" component={Cart} />
           <Route path="/orders" component={Orders} />
+
+          {/* fallback */}
           <Route component={NotFound} />
         </Switch>
       </main>
