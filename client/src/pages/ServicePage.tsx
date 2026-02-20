@@ -81,7 +81,7 @@ export default function ServicePage() {
             <div className="flex flex-col">
               <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Total</span>
               <span className="font-display text-xl font-bold text-foreground">
-                ${(cartTotal / 100).toFixed(2)}
+                ₹{(cartTotal / 100).toFixed(2)}
               </span>
             </div>
             <Link href="/cart">
